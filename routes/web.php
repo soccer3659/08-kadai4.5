@@ -14,3 +14,28 @@
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::group(['prefix' => 'XXX'],function() {
+    Route::get('', 'AAAController@bbb');
+});
+
+Route::group(['prefix' => 'admin'], function() {
+    Route::get('news/create', 'Admin\NewsController@add')->middleware('auth');
+    Route::get('news/edit', 'Admin\NewsController@edit');
+    Route::get('profile/create', 'Admin\ProfileController@add')->middleware('auth');
+    Route::get('profile/edit', 'Admin\ProfileController@edit')->middleware('auth');
+});
+
+
+//13の追記部分
+
+ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function() {
+     Route::get('news/create', 'Admin\NewsController@add');
+     Route::post('news/create', 'Admin\NewsController@create'); # 追記
+     Route::post('profile/create', 'Admin\ProfileController@create'); #追記　課題3
+     Route::post('profile/edit', 'Admin\ProfileController@update'); #追記　課題6
+ });     
+
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');
