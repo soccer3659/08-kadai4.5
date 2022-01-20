@@ -147,7 +147,12 @@ return [
 
     'attributes' => [
         'title' => 'タイトル',
-        'body' => '本文'
-    ],
+        'body' => '本文',
+        'name' => '氏名',
+        'gender' => '性別',
+        'introduction' =>'自己紹介',
+        'hobby' => '趣味'
 
+        ],
+    
 ];
