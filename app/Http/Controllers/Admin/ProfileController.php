@@ -23,7 +23,6 @@ class ProfileController extends Controller
     $this->validate($request, Profile::$rules);
     $profile = new Profile;
     $form =$request->all();
-    
     //フォームから送信されてきた_tokenを削除する
     unset($form['token']);
     
@@ -34,13 +33,36 @@ class ProfileController extends Controller
     return redirect('admin/profile/create');
     }
     
-    public function edit()
+    //16　課題で追加　編集画面
+    public function edit(Request $request)
     {
-        return view('admin.profile.edit');
+        //Profile Modelからデータを取得する
+        $profile = Profile::find($request->id);
+        if (empty($profile)) {
+            abort(404);
+        }
+        return view('admin.profile.edit', ['profile_form' => $profile]);
     }
     
-    public function update()
-    {
+    //編集画面から送信され多フォームデータを処理する部分    
+    public function update(Request $request)
+    {   
+        //Validationえおかける
+        $this->validate($request, Profile::$rules);
+        //Profile Modelからデータを取得する
+        $profile = Profile::find($request->id);
+        //送信されてきたフォームデータを格納する
+        $profile_form = $request->all();
+        unset($profile_form['_token']);
+        
+        //該当するデータを上書きして保存する　下記は$profile->fill($profile); $profile->save();を短縮したもの
+        $profile->fill($profile_form)->save();
+        
         return redirect('admin/profile/edit');
     }
 }
+
+
+
+
+

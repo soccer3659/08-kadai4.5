@@ -15,6 +15,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+//routeの書き方
 Route::group(['prefix' => 'XXX'],function() {
     Route::get('', 'AAAController@bbb');
 });
@@ -32,8 +33,13 @@ Route::group(['prefix' => 'admin'], function() {
  Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function() {
      Route::get('news/create', 'Admin\NewsController@add');
      Route::post('news/create', 'Admin\NewsController@create'); # 追記
-     Route::post('profile/create', 'Admin\ProfileController@create'); #追記　課題3
-     Route::post('profile/edit', 'Admin\ProfileController@update'); #追記　課題6
+     Route::get('news', 'Admin\NewsController@index')->middleware('auth'); #16で追記
+     Route::get('news/edit', 'Admin\NewsController@edit')->middleware('auth'); #16で追記
+     Route::post('news/edit', 'Admin\NewsController@update')->middleware('auth'); #16で追記
+     Route::get('news/delete', 'Admin\NewsController@delete')->middleware('auth'); #16で追記
+     Route::post('profile/create', 'Admin\ProfileController@create'); #13課題3で追記
+     Route::post('profile/edit', 'Admin\ProfileController@update'); #13課題6で追記
+     Route::get('profile/edit', 'Admin\ProfileController@edit'); #16課題1追記
  });     
 
 Auth::routes();
