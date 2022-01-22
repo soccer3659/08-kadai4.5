@@ -7,6 +7,10 @@ use App\Http\Controllers\Controller;
 //14にて以下を追記
 use App\News;
 
+//17にて以下を追記
+use App\History;
+use Carbon\Carbon;
+
 class NewsController extends Controller
 {
   public function add()
@@ -94,7 +98,16 @@ class NewsController extends Controller
     //該当するデータを上書きして保存する 下記は$news->fill($form);　$news->save();を短縮したもの
     $news->fill($news_form)->save();
     
-    return redirect('admin/news');
+    //以下を17で追記
+    //update Actionで、News Modelを保存するタイミングで、
+    //同時に History Modelにも編集履歴を追加するための追記
+    $history = new History();
+    $history->news_id = $news->id;
+    $history->edited_at = Carbon::now();
+    $history->save();
+    //
+    
+    return redirect('admin/news/');
   }
   
   //削除に対応する
