@@ -70,6 +70,7 @@
                             </li>
                             @endguest
                         </ul>
+                        <p>デプロイ課題</p>
                     </div>
                 </div>
             </nav>
