@@ -37,12 +37,17 @@ Route::group(['prefix' => 'admin'], function() {
      Route::get('news/edit', 'Admin\NewsController@edit')->middleware('auth'); #16で追記
      Route::post('news/edit', 'Admin\NewsController@update')->middleware('auth'); #16で追記
      Route::get('news/delete', 'Admin\NewsController@delete')->middleware('auth'); #16で追記
-     
      Route::post('profile/create', 'Admin\ProfileController@create'); #13課題3で追記
      Route::post('profile/edit', 'Admin\ProfileController@update'); #13課題6で追記
      Route::get('profile/edit', 'Admin\ProfileController@edit'); #16課題1追記
- });     
-
+     });
+     
+     Route::get('/', 'NewsController@index'); #19で追記
+     Route::get('/profile', 'ProfileController@index'); #19課題で追記
+     
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+
+
+
