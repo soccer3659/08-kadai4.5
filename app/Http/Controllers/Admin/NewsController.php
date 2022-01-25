@@ -11,6 +11,9 @@ use App\News;
 use App\History;
 use Carbon\Carbon;
 
+//最終で以下を追記
+use Storage;
+
 class NewsController extends Controller
 {
   public function add()
@@ -30,8 +33,11 @@ class NewsController extends Controller
       $form = $request->all();
       // フォームから画像が送信されてきたら、保存して、$news->image_path に画像のパスを保存する
       if (isset($form['image'])) {
-        $path = $request->file('image')->store('public/image');
-        $news->image_path = basename($path);
+        //以下2行を最終にて変更
+        //$path = $request->file('image')->store('public/image');
+        //$news->image_path = basename($path);
+        $path = $request->disk('s3')->putFile('/',$news_form['image'],'public');
+        $news->image_path = storage::disk('s3')->url($path);
       } else {
           $news->image_path = null;
       }
@@ -39,7 +45,7 @@ class NewsController extends Controller
       unset($form['token']);
       
       // フォームから送信されてきたimageを削除する
-      unset($form['imege']);
+      unset($form['image']);
       
       //データベースに保存する
       $news->fill($form);
@@ -77,26 +83,26 @@ class NewsController extends Controller
   //編集画面から送信されたフォームデータを処理する部分です
   public function update(Request $request)
   {
-    //Validationをかける
-    $this->validate($request, News::$rules);
-    //News Modelからデータを取得する
-    $news = News::find($request->id);
-    //送信されてきたフォームデータを格納する
-    $news_form = $request->all();
-    if ($request->remove == 'true') {
-      $news_form['image_path'] = null;
-    } elseif ($request->file('image')) {
-      $path = $request->file('image')->store('public/image');
-      $news_form['image_path'] = basename($path);
-    } else {
-      $news_form['image_path'] = $news->image_path;
-    }
-    
-    unset($news_form['image']);
-    unset($news_form['remove']);
-    unset($news_form['_token']);
-    //該当するデータを上書きして保存する 下記は$news->fill($form);　$news->save();を短縮したもの
-    $news->fill($news_form)->save();
+      // Validationをかける
+      $this->validate($request, News::$rules);
+      // News Modelからデータを取得する
+      $news = News::find($request->id);
+      // 送信されてきたフォームデータを格納する
+      $news_form = $request->all();
+      if ($request->remove == 'true') {
+          $news_form['image_path'] = null;
+      } elseif ($request->disk('s3')) {
+          $path = $request->disk('s3')->putFile('/', $news_form['image'],'public');
+          $news_form['image_path'] = disk('s3')->url($path);
+      } else {
+          $news_form['image_path'] = $news->image_path;
+      }
+
+      unset($news_form['image']);
+      unset($news_form['remove']);
+      unset($news_form['_token']);
+      //該当するデータを上書きして保存する 下記は$news->fill($form);　$news->save();を短縮したもの
+      $news->fill($news_form)->save();
     
     //以下を17で追記
     //update Actionで、News Modelを保存するタイミングで、
