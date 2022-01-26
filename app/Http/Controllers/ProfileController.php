@@ -22,7 +22,7 @@ class ProfileController extends Controller
               $headline = null;
         }
     
-        return view('profile.index', ['headline' => $headline]);
+        return view('profile.index', ['headline' => $headline, 'posts' => $posts]);
     }
     
 }

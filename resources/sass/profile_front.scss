@@ -58,3 +58,32 @@ body {
             }
         }    
 }
+
+
+.posts {
+    .post {
+        .date {
+            font-size: 0.6em;
+            color: #999999;
+        }
+        .name {
+                color: #fff;
+                font-size:0.8em;
+        }
+        
+        .gender{
+                color: #fff;
+                font-size:0.8em;
+        }
+        
+        .hobby{
+                color: #fff;
+                font-size:0.8em;
+        }
+        
+        .introduction{
+                color: #fff;
+                font-size:0.8em;
+        }    
+    }
+}
